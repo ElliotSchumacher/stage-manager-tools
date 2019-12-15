@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="index.css">
+    <title>Stage Manager Tools</title>
+  </head>
+  <body>
+    <header>
+      <h1>To Do List</h1>
+    </header>
+    <main>
+      <section id="login-page">
+        <form>
+          <header>
+            <h2>Login</h2>
+          </header>
+          <div>
+            <label for="username">Username:</label>
+            <input id="username" type="text" name="username" placeholder="John" minlength="1">
+            <label for="password">Password:</label>
+            <input id="password" type="text" name="password" minlength="1">
+          </div>
+          <div id="returning-ui">
+            <p>Returning user?</p>
+            <label for="yes">Yes</label>
+            <input id="yes" type="radio" name="returning" value="yes" checked>
+            <label for="no">No</label>
+            <input id="no" type="radio" name="returning" value="no">
+          </div>
+          <input id="login" type="submit" value="Login">
+        </form>
+      </section>
+      <!-- Task list section -->
+      <section id="lists" class="hidden">
+        <!-- Tasks to complete list-->
+        <section>
+          <header>
+            <h3>Tasks that need to be accomplished</h3>
+          </header>
+          <ul id="tasks-pending">
+          </ul>
+        </section>
+        <!-- Completed tasks list-->
+        <section>
+          <header>
+            <h3>Tasks that you already accomplished</h3>
+          </header>
+          <ul id="tasks-complete">
+          </ul>
+        </section>
+      </section>
+    </main>
+    <footer>
+      <h2>Attributions</h2>
+      <h3>Themes:</h3>
+      <ul>
+        <li>Theme one</li>
+        <li>Theme two</li>
+        <li>Theme three</li>
+      </ul>
+    </footer>
+  </body>
+</html>
