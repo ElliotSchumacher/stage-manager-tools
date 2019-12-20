@@ -6,30 +6,41 @@
     <title>Stage Manager Tools</title>
   </head>
   <body>
-    <header>
-      <h1>To Do List</h1>
+    <header class="page-bookends">
+      <h1>Stage Manager Tools</h1>
     </header>
     <main>
-      <section id="login-page">
+      <!-- Login section -->
+      <section id="login">
         <form>
           <header>
             <h2>Login</h2>
           </header>
           <div>
-            <label for="username">Username:</label>
-            <input id="username" type="text" name="username" placeholder="John" minlength="1">
-            <label for="password">Password:</label>
-            <input id="password" type="text" name="password" minlength="1">
+            <label for="username-login">Username:</label>
+            <input id="username-login" type="text" name="username" placeholder="John" minlength="1">
+            <label for="password-login">Password:</label>
+            <input id="password-login" type="text" name="password" minlength="1">
           </div>
-          <div id="returning-ui">
-            <p>Returning user?</p>
-            <label for="yes">Yes</label>
-            <input id="yes" type="radio" name="returning" value="yes" checked>
-            <label for="no">No</label>
-            <input id="no" type="radio" name="returning" value="no">
-          </div>
-          <input id="login" type="submit" value="Login">
+          <!-- TODO: Delete test Text -->
+          <p class="hidden">Test Text: Server response and hint</p>
+          <input type="button" value="New User">
+          <input type="submit" value="Login">
         </form>
+      </section>
+      <!-- Create User Section -->
+      <section id="new-user" class="hidden">
+        <div>
+          <label for="username-new">Username:</label>
+          <input id="username-new" type="text" name="username" placeholder="John" minlength="1">
+          <label for="password-new">Password:</label>
+          <input id="password-new" type="text" name="password" minlength="1">
+          <label for="hint-new">Hint:</label>
+          <input id="hint-new" type="text" name="hint" placeholder="Name of favorite cat" minlength="1">
+        </div>
+        <!-- TODO: Delete test Text -->
+        <p class="hidden">Test Text: Server response</p>
+        <input type="button" value="Create User">
       </section>
       <!-- Task list section -->
       <section id="lists" class="hidden">
@@ -51,9 +62,9 @@
         </section>
       </section>
     </main>
-    <footer>
-      <h2>Attributions</h2>
-      <h3>Themes:</h3>
+    <footer class="page-bookends">
+      <h3>Attributions</h3>
+      <h4>Themes:</h4>
       <ul>
         <li>Theme one</li>
         <li>Theme two</li>
