@@ -113,6 +113,6 @@ label, input, button, p {
                 inset -2px -2px 3px #00000099;
 }
 
-.hidden {
+.hidden, #lists.hidden {
   display: none;
 }
