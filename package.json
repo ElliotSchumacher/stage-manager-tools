@@ -1,0 +1,15 @@
+{
+  "name": "stage-manager-tools",
+  "version": "1.0.0",
+  "description": "SM tools web app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.cs.washington.edu:eschu1/stage-manager-tools.git"
+  },
+  "author": "elliot schumacher",
+  "license": "ISC"
+}
