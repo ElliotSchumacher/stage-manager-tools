@@ -9,38 +9,43 @@
     <header class="page-bookends">
       <h1>Stage Manager Tools</h1>
     </header>
-    <main>
+    <main class="login-1">
       <!-- Login section -->
-      <section id="login">
+      <section id="login" class="login">
         <form>
           <header>
             <h2>Login</h2>
           </header>
           <div>
             <label for="username-login">Username:</label>
-            <input id="username-login" type="text" name="username" placeholder="John" minlength="1">
+            <input id="username-login" type="text" name="username" placeholder="John" minlength="1" required>
             <label for="password-login">Password:</label>
-            <input id="password-login" type="text" name="password" minlength="1">
+            <input id="password-login" type="text" name="password" minlength="1" required>
           </div>
           <!-- TODO: Delete test Text -->
-          <p class="hidden">Test Text: Server response and hint</p>
-          <input type="button" value="New User">
-          <input type="submit" value="Login">
+          <p class="hidden-1">Test Text: Server response and hint</p>
+          <button type="button">New User</button>
+          <button class="submit-btn" type="submit">Login</button>
         </form>
       </section>
       <!-- Create User Section -->
-      <section id="new-user" class="hidden">
-        <div>
-          <label for="username-new">Username:</label>
-          <input id="username-new" type="text" name="username" placeholder="John" minlength="1">
-          <label for="password-new">Password:</label>
-          <input id="password-new" type="text" name="password" minlength="1">
-          <label for="hint-new">Hint:</label>
-          <input id="hint-new" type="text" name="hint" placeholder="Name of favorite cat" minlength="1">
-        </div>
-        <!-- TODO: Delete test Text -->
-        <p class="hidden">Test Text: Server response</p>
-        <input type="button" value="Create User">
+      <section id="new-user" class="login hidden">
+        <form>
+          <header>
+            <h2>Create New User</h2>
+          </header>
+          <div>
+            <label for="username-new">Username:</label>
+            <input id="username-new" type="text" name="username" placeholder="John" minlength="1" required>
+            <label for="password-new">Password:</label>
+            <input id="password-new" type="text" name="password" minlength="1" required>
+            <label for="hint-new">Hint:</label>
+            <input id="hint-new" type="text" name="hint" placeholder="Name of favorite cat" minlength="1" required>
+          </div>
+          <!-- TODO: Delete test Text -->
+          <p class="hidden-1">Test Text: Server response</p>
+          <button class="submit-btn" type="submit">Create User</button>
+        </form>
       </section>
       <!-- Task list section -->
       <section id="lists" class="hidden">

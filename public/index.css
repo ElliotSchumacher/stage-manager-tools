@@ -1,3 +1,118 @@
+h1, h2, h3, h4 {
+  text-align: center;
+  margin: 0px 0px 0px 0px;
+}
+
+h1 {
+  font-size: 48pt;
+}
+
+h2 {
+  font-size: 34pt;
+}
+
+h3 {
+  font-size: 22pt;
+}
+
+h4 {
+  font-size: 18pt;
+}
+
+/* body > header, main, body > footer { */
+body > * {
+  background-color: #21A0A0;
+}
+
+body > *, #login, #new-user {
+  width: 80%;
+  margin: auto;
+}
+
+main {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border-radius: 15px 15px 15px 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+form > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 80%;
+  margin: auto;
+}
+
+label, input {
+  font-size: 20pt;
+}
+
+input {
+  width: 75%;
+}
+
+p {
+  margin-bottom: 0px;
+  text-align: center;
+}
+
+button {
+  width: 15%;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+
+label, input, button, p {
+  margin-top: 10px;
+}
+
+
+#login, #new-user {
+  background-color: #C4D6B0;
+}
+
+#lists {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#lists > section {
+  background-color: white;
+  border: 4px black solid;
+  border-radius: 8px;
+  width: 45%;
+}
+
+.page-bookends {
+  border-radius: 25px;
+}
+
+.login {
+  border-radius: 25% 30px;
+}
+
+.submit-btn {
+  /* height: 24px; */
+  width: 20%;
+  margin-bottom: 10px;
+  background-color: #F64740;
+  border-radius: 8px;
+  font-size: 16pt;
+  color: #FFFFFF;
+  text-shadow: 1px 1px 1px #000000;
+  box-shadow: inset 2px 2px 3px #FFFFFF99,
+                inset -2px -2px 3px #00000099;
+}
+
 .hidden {
   display: none;
 }
