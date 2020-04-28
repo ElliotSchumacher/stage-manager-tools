@@ -23,7 +23,7 @@ const CLIENT_ERROR_JSON = {"error": "You have made an invalid request"};
 const ACCESS_DENIED_ERROR = 401;
 const ACCESS_DENIED_JSON = {"error": "Invalid login credentials"};
 const SERVER_ERROR = 500;
-const SERVER_ERROR_MSG = {"error": "There has been an error on the server"};
+const SERVER_ERROR_JSON = {"error": "There has been an error on the server"};
 const SESSION_NUMBER_LENGTH = 9;
 const SALT_ROUNDS = 10;
 
@@ -47,11 +47,11 @@ app.post("/login", async function(req, res) {
         let sessionNumber = await updateSessionNumber(username);
         res.send({"sessionNumber": sessionNumber});
       } else {
-        res.status(ACCESS_DENIED_ERROR).send(ACCESS_DENIED_MSG);
+        res.status(ACCESS_DENIED_ERROR).send(ACCESS_DENIED_JSON);
       }
     } catch (error) {
       console.error(error);
-      res.status(SERVER_ERROR).send(SERVER_ERROR_MSG);
+      res.status(SERVER_ERROR).send(SERVER_ERROR_JSON);
     }
   }
 });
@@ -60,7 +60,7 @@ app.post("/login", async function(req, res) {
  * Adds a new user to the system.
  * Type: Post
  * Body: username, password, hint
- * Response Type: json
+ * Response Type: JSON
  */
 app.post("/signup", async function(req, res) {
   res.type("json");
@@ -81,7 +81,7 @@ app.post("/signup", async function(req, res) {
       }
     } catch (error) {
       console.error(error);
-      res.status(SERVER_ERROR).send(SERVER_ERROR_MSG);
+      res.status(SERVER_ERROR).send(SERVER_ERROR_JSON);
     }
   }
 });
@@ -96,7 +96,7 @@ app.post("/signup", async function(req, res) {
 function getMissingParameterMessage(parameters) {
   let response;
   if (parameters.length === 0) {
-    response = CLIENT_ERROR_MSG;
+    response = CLIENT_ERROR_JSON;
   } else {
     response = "Invalid parameters: " + parameters[0];
     for(let index = 1; index < parameters.length; index++) {
