@@ -19,33 +19,51 @@ const db = mysql.createPool({
 app.use(multer().none());
 
 const CLIENT_ERROR = 400;
-const CLIENT_ERROR_MSG = "You have made an invalid request";
+const CLIENT_ERROR_JSON = {"error": "You have made an invalid request"};
+const ACCESS_DENIED_ERROR = 401;
+const ACCESS_DENIED_JSON = {"error": "Invalid login credentials"};
 const SERVER_ERROR = 500;
-const SERVER_ERROR_MSG = "There has been an error on the server";
+const SERVER_ERROR_MSG = {"error": "There has been an error on the server"};
 const SESSION_NUMBER_LENGTH = 9;
 const SALT_ROUNDS = 10;
 
 /*
- * Checks to see if the given username and password match any user in the system.
+ * Checks to see if the given username and password match any user
+ * in the system.
  * Type: Post
  * Body: username, password
- * Response type: text
+ * Response type: JSON
  */
 app.post("/login", async function(req, res) {
-  res.type("text");
+  res.type("json");
   let username = req.body.username;
   let password = req.body.password;
   if (!username || !password) {
     bodyParams = ["username", "password"];
     res.status(CLIENT_ERROR).send(getMissingParameterMessage(bodyParams));
   } else {
-    // Check to see if user 
-    checkUserCredintials(username, password);
+    try {
+      if(await checkUserCredintials(username, password)) {
+        let sessionNumber = await updateSessionNumber(username);
+        res.send({"sessionNumber": sessionNumber});
+      } else {
+        res.status(ACCESS_DENIED_ERROR).send(ACCESS_DENIED_MSG);
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(SERVER_ERROR).send(SERVER_ERROR_MSG);
+    }
   }
 });
 
+/*
+ * Adds a new user to the system.
+ * Type: Post
+ * Body: username, password, hint
+ * Response Type: json
+ */
 app.post("/signup", async function(req, res) {
-  res.type("text");
+  res.type("json");
   let username = req.body.username;
   let password = req.body.password;
   let hint = req.body.hint;
@@ -54,24 +72,13 @@ app.post("/signup", async function(req, res) {
     res.status(CLIENT_ERROR).send(getMissingParameterMessage(bodyParams));
   } else {
     try {
-      let duplicate = false;
-      await bcrypt.genSalt(SALT_ROUNDS, async function(err, salt) {
-        await bcrypt.hash(password, salt, async function(err, passwordHash) {
-          duplicate = await insertUser(username, passwordHash, hint);
-        });
-      });
-      // await bcrpyt.hash(password, SALT_ROUNDS, async function(err, passwordHash) {
-      //   duplicate = await insertUser(username, passwordHash, hint);
-      // });
-      console.log(duplicate);
-      
+      let duplicate = await usernameExist(username);
       if (duplicate) {
         res.status(CLIENT_ERROR).send("Username already taken.");
       } else {
+        await insertUser(username, password, hint);
         res.send("User successfully added.");
       }
-      console.log("End of signup");
-      
     } catch (error) {
       console.error(error);
       res.status(SERVER_ERROR).send(SERVER_ERROR_MSG);
@@ -84,7 +91,7 @@ app.post("/signup", async function(req, res) {
  * a code 400 error.
  * @param {object[]} parameters - An array containing objects with the name of
  *                                the field and the value passed.
- * @return {string} - The error message that should be returned to the client.
+ * @return {JSON} - The error message that should be returned to the client.
  */
 function getMissingParameterMessage(parameters) {
   let response;
@@ -96,7 +103,7 @@ function getMissingParameterMessage(parameters) {
       response += ", " + parameters[index];
     }
   }
-  return response;
+  return {"error": response};
 }
 
 /*
@@ -109,23 +116,55 @@ function getMissingParameterMessage(parameters) {
  *                    a username is found without a matching password.
  */
 async function checkUserCredintials(username, password) {
-  // hash password
-  let hashedPassword = null;
-  // query for password using username 
-  let query = "SELECT password FROM Users WHERE username = ?";
-  let [row] = await db.query(query, [username]);
-  // check if hashed password matches stored password
-  console.log(row);
-  // return true if password match
-  
-  
+  if(await usernameExist(username)) {
+    // query for password using username 
+    let query = "SELECT password FROM Users WHERE username = ?";
+    let [row] = await db.query(query, [username]);
+    let storedPassword = row[0]["password"];
+    return await bcrypt.compare(password, storedPassword);
+  } else {
+    return false;
+  }
 }
 
 /* 
- * 
+ * Returns true if the username is in the users database already.
+ * @param {String} username - The name of the user to check for.
+ * @return {int} - True if the username is found and false if not.
  */
 async function usernameExist(username) {
-  let [row] = await db.query("SELECT username FROM ");
+  let query = "SELECT COUNT(username) FROM Users WHERE username = ?";
+  let placeholders = [username];
+  let [rows] = await db.query(query, placeholders);
+  let userCount = rows[0]['COUNT(username)'];
+  return userCount > 0;
+} 
+
+/*
+ * Adds the user to the database with the password hashed.
+ * @param {String} username - The username to be added for the new user.
+ * @param {String} password - The password to be added for the new user.
+ * @param {String} hint - The hint to be added for the new user.
+ */
+async function insertUser(username, password, hint) {
+  const hash = bcrypt.hashSync(password, SALT_ROUNDS);
+  let placeholders = [username, hash, hint];
+  let query = "INSERT INTO Users (username, password, hint) VALUES (?, ?, ?)";
+  await db.query(query, placeholders);
+}
+
+/*
+ * Assigns a user a random session number and returns that number.
+ * @param {String} username - The username of the user that will be assigned
+ *                            the new session number.
+ * @return {int} - The random session number assigned to the user.
+ */
+async function updateSessionNumber(username) {
+  let sessionNumber = getNewSessionNumber();
+  let placeholders = [sessionNumber, username];
+  let query = "UPDATE Users SET session_number = ? WHERE username = ?";
+  await db.query(query, placeholders);
+  return sessionNumber;
 }
 
 /*
@@ -136,28 +175,6 @@ function getNewSessionNumber() {
   let sessionNumber = Math.pow(10, SESSION_NUMBER_LENGTH) * Math.random();
   sessionNumber = Math.floor(sessionNumber);
   return sessionNumber;
-}
-
-/*
- */
-async function insertUser(username, password, hint) {  
-  let duplicate = false;
-  try {
-    let placeholders = [username, password, hint];
-    let query = "INSERT INTO Users (username, password, hint) VALUES (?, ?, ?)";
-    let [row] = await db.query(query, placeholders);
-  } catch (error) {
-    if (error.code === "ER_DUP_ENTRY") {
-      console.log("here");
-      
-      duplicate = true;
-    } else {
-      console.error(error);
-    }
-  }
-  console.log("Duplicate return: " + duplicate);
-  
-  return duplicate;
 }
 
 app.use(express.static("public"));
